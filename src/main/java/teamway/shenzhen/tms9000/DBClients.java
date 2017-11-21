@@ -26,8 +26,10 @@ public class DBClients {
 	            TProtocol protocol = new TBinaryProtocol(transport);
 	            DbService.Client client = new DbService.Client(protocol);
 	            // 调用服务的方法
-	            boolean b = client.initDB("127.0.0.1", 3306, "root", "74110", "test", 3, 10);
-	            System.out.println(b);
+	            client.initDB("127.0.0.1", 3306, "root", "74110", "test", 3, 10);
+	            String sql2 = "select * from huhu";
+				String string = client.queryObject(sql2);
+				System.out.println(string);
 	            transport.close();
 	        } catch (TTransportException e) {
 	            e.printStackTrace();
