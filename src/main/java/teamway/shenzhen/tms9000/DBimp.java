@@ -9,41 +9,37 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.thrift.TException;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DBimp implements DbService.Iface {
-	private String ip;
-	private String user;
-	private String password;
-	private String dbInstance;
-	private long port;
-	private int initialPoolSize;
-	private int maxPoolSize;
+	static Connection conn ;
 
-	@Override
-	public boolean initDB(String ip, int port, String user, String password, String dbInstance, int initialPoolSize,
-			int maxPoolSize) throws TException {
-		// TODO Auto-generated method stub
-		this.ip = ip;
-		this.port = port;
-		this.user = user;
-		this.password = password;
-		this.dbInstance = dbInstance;
-		this.initialPoolSize = initialPoolSize;
-		this.maxPoolSize = maxPoolSize;
-		return false;
+	public static void getConnection() {
+		ComboPooledDataSource dataSource = new ComboPooledDataSource("mysql");
+		try {
+			conn = dataSource.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
-	public boolean executeNoneQuery(String sql) throws TException {
+	public boolean executeNoneQuery(String sql) {
 		// TODO Auto-generated method stub
 		// 更新删除添加功能
 		int i = 0;
-		Connection conn = null;
 		synchronized (this) {
-			conn = JdbcUtils.getConnection(ip, port, user, password, dbInstance, initialPoolSize, maxPoolSize);
 			QueryRunner qr = new QueryRunner();
+			DBimp.getConnection();
 			try {
-				i = qr.update(conn, sql);
+				if (conn != null) {
+
+					i = qr.update(conn, sql);
+				} else {
+					i = 0;
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -62,24 +58,27 @@ public class DBimp implements DbService.Iface {
 	}
 
 	@Override
-	public String queryObject(String sql) throws TException {
+	public List<String> queryObject(String sql) {
 		// TODO Auto-generated method stub
-		ArrayList<Object> list = new ArrayList<>();
+		ArrayList<String> list = new ArrayList<>();
 		QueryRunner qr = new QueryRunner();
 		ArrayListHandler handler = new ArrayListHandler();
-		Connection conn = null;
+		DBimp.getConnection();
 		try {
 			synchronized (this) {
-				conn = JdbcUtils.getConnection(ip, port, user, password, dbInstance, initialPoolSize, maxPoolSize);
-				List<Object[]> query = qr.query(conn, sql, handler);
-				for (Object[] objects : query) {
-					for (Object object : objects) {
-						list.add(object);
+				if (conn != null) {
+
+					List<Object[]> query = qr.query(conn, sql, handler);
+					for (Object[] objects : query) {
+						for (Object object : objects) {
+							list.add(object.toString());
+						}
 					}
+				} else {
+					throw new Error();
 				}
 			}
-			String string = list.toString();
-			return string;
+			return list;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,7 +91,8 @@ public class DBimp implements DbService.Iface {
 				e.printStackTrace();
 			}
 		}
-		return "查询值为空";
+		return list;
+
 	}
 
 }
