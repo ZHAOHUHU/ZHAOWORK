@@ -13,7 +13,7 @@ import org.apache.thrift.transport.TTransportException;
 
 public class DBServer {
 
-	private static final int port = 9996;
+	private static final int port = 10745;
 	//private static final int clientTimeout = null;
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
