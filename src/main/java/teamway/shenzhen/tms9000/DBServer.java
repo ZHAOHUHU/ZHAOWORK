@@ -1,5 +1,6 @@
 package teamway.shenzhen.tms9000;
 
+import org.apache.log4j.Logger;
 import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TCompactProtocol;
@@ -14,10 +15,10 @@ import org.apache.thrift.transport.TTransportException;
 public class DBServer {
 
 	private static final int port = 10745;
-	//private static final int clientTimeout = null;
+	public static Logger log = Logger.getLogger(DBServer.class);
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		System.out.println("action.......");
+		log.info("action.........");
 		  try {
 	            TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(port);
 	            // 设置协议工厂为 TBinaryProtocol.Factory
@@ -31,10 +32,10 @@ public class DBServer {
 	            tArgs.protocolFactory(new TBinaryProtocol.Factory());
 	            //线程池服务模型，使用标准的阻塞式IO，预先创建一组线程处理请求。
 	            TServer server =new TNonblockingServer(tArgs);
-	            System.out.println("Start server on "+port);
+	            log.info("Start server on "+port);
 	            server.serve();
 	        } catch (TTransportException e) {
-	            e.printStackTrace();
+	           log.error(e);
 	        }
 	    }
 	}
