@@ -36,25 +36,26 @@ public class DBimp implements DbService.Iface {
             QueryRunner qr = new QueryRunner();
             // DBimp.getConnection();
             try {
-                if (conn != null) {
-                    i = qr.update(conn, sql);
-                    log.info("执行的sql语句为" + "[" + sql + "]");
-                    log.info("成功更新了" + i + "语句");
+                if (conn == null) {
+                    DBimp.getConnection();
                 }
+                i = qr.update(conn, sql);
+                log.info("执行的sql语句为" + "[" + sql + "]");
+                log.info("成功更新了" + i + "语句");
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 log.info("执行的sql语句为" + "[" + sql + "]");
                 log.error(e);
             }
         }
-        if (i != 0) {
-            try {
+        try {
+            if (conn == null) {
                 conn.close();
                 return true;
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                log.error(e);
             }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            log.error(e);
         }
         return false;
     }
@@ -86,7 +87,7 @@ public class DBimp implements DbService.Iface {
             log.error(e);
         } finally {
             try {
-                if(conn==null){
+                if (conn == null) {
                     // 关闭连接
                     conn.close();
                 }
