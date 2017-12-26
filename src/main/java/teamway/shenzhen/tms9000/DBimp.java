@@ -8,12 +8,11 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.log4j.Logger;
-import org.apache.thrift.TException;
-
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DBimp implements DbService.Iface {
     static Connection conn;
+
     //日志对象
     public static Logger log = Logger.getLogger(DBimp.class);
 
@@ -35,27 +34,27 @@ public class DBimp implements DbService.Iface {
         int i = 0;
         synchronized (this) {
             QueryRunner qr = new QueryRunner();
-            DBimp.getConnection();
+            // DBimp.getConnection();
             try {
                 if (conn != null) {
-
                     i = qr.update(conn, sql);
-                } else {
-                    i = 0;
+                    log.info("执行的sql语句为" + "[" + sql + "]");
+                    log.info("成功更新了" + i + "语句");
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.info("执行的sql语句为" + "[" + sql + "]");
+                log.error(e);
             }
         }
         if (i != 0) {
             try {
                 conn.close();
+                return true;
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.error(e);
             }
-            return true;
         }
         return false;
     }
@@ -63,36 +62,36 @@ public class DBimp implements DbService.Iface {
     @Override
     public List<String> queryObject(String sql) {
         // TODO Auto-generated method stub
-        log.warn("行不行"+sql);
         ArrayList<String> list = new ArrayList<>();
         QueryRunner qr = new QueryRunner();
         ArrayListHandler handler = new ArrayListHandler();
-        DBimp.getConnection();
+        // DBimp.getConnection();
         try {
             synchronized (this) {
-                if (conn != null) {
-
-                    List<Object[]> query = qr.query(conn, sql, handler);
-                    for (Object[] objects : query) {
-                        for (Object object : objects) {
-                            list.add(object.toString());
-                        }
+                if (conn == null) {
+                    DBimp.getConnection();
+                    log.info("执行的sql语句为" + "[" + sql + "]");
+                    log.info("查询成功");
+                }
+                List<Object[]> query = qr.query(conn, sql, handler);
+                for (Object[] objects : query) {
+                    for (Object object : objects) {
+                        list.add(object.toString());
                     }
-                } else {
-                    throw new Error();
                 }
             }
             return list;
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e);
         } finally {
             try {
-                // 关闭连接
-                conn.close();
+                if(conn==null){
+                    // 关闭连接
+                    conn.close();
+                }
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.error(e);
             }
         }
         return list;
