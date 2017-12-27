@@ -11,22 +11,21 @@ import org.apache.log4j.Logger;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DBimp implements DbService.Iface {
-    static Connection conn;
 
     //日志对象
     public static Logger log = Logger.getLogger(DBimp.class);
 
-    public static void getConnection() {
-        ComboPooledDataSource dataSource = new ComboPooledDataSource("mysql");
-        try {
-            conn = dataSource.getConnection();
-            log.info("获取连接成功");
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            log.error(e);
-        }
-
-    }
+//    public static void getConnection() {
+//        ComboPooledDataSource dataSource = new ComboPooledDataSource("mysql");
+//        try {
+//            conn = dataSource.getConnection();
+//            log.info("获取连接成功");
+//        } catch (SQLException e) {
+//            // TODO Auto-generated catch block
+//            log.error(e);
+//        }
+//
+//    }
 
     @Override
     public boolean executeNoneQuery(String sql) {
@@ -36,26 +35,20 @@ public class DBimp implements DbService.Iface {
             QueryRunner qr = new QueryRunner();
             // DBimp.getConnection();
             try {
+                Connection conn = jdbcUtil.getConnection();
                 if (conn == null) {
-                    DBimp.getConnection();
                 }
                 i = qr.update(conn, sql);
                 log.info("执行的sql语句为" + "[" + sql + "]");
                 log.info("成功更新了" + i + "语句");
+                if (conn == null) {
+                    jdbcUtil.releaseConnection(conn);
+                }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 log.info("执行的sql语句为" + "[" + sql + "]");
                 log.error(e);
             }
-        }
-        try {
-            if (conn == null) {
-                conn.close();
-                return true;
-            }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            log.error(e);
         }
         return false;
     }
@@ -69,8 +62,8 @@ public class DBimp implements DbService.Iface {
         // DBimp.getConnection();
         try {
             synchronized (this) {
+                Connection conn = jdbcUtil.getConnection();
                 if (conn == null) {
-                    DBimp.getConnection();
                     log.info("执行的sql语句为" + "[" + sql + "]");
                     log.info("查询成功");
                 }
@@ -80,21 +73,15 @@ public class DBimp implements DbService.Iface {
                         list.add(object.toString());
                     }
                 }
+                jdbcUtil.releaseConnection(conn);
             }
             return list;
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             log.error(e);
-        } finally {
-            try {
-                if (conn == null) {
-                    // 关闭连接
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                log.error(e);
-            }
         }
+        // 关闭连接
+
         return list;
 
     }
