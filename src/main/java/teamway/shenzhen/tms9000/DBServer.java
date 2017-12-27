@@ -18,7 +18,7 @@ public class DBServer {
 	public static Logger log = Logger.getLogger(DBServer.class);
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		log.info("action.........");
+		log.debug("action.........");
 		  try {
 	            TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(port);
 	            // 设置协议工厂为 TBinaryProtocol.Factory
@@ -32,7 +32,7 @@ public class DBServer {
 	            tArgs.protocolFactory(new TBinaryProtocol.Factory());
 	            //线程池服务模型，使用标准的阻塞式IO，预先创建一组线程处理请求。
 	            TServer server =new TNonblockingServer(tArgs);
-	            log.info("Start server on "+port);
+	            log.debug("Start server on "+port);
 	            server.serve();
 	        } catch (TTransportException e) {
 	           log.error(e);
