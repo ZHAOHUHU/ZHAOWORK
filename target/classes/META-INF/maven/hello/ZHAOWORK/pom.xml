@@ -43,12 +43,19 @@
         </dependency>
     </dependencies>
     <build>
-        <!--如果其他地方也有配置文件就用这个导入-->
+        <!--如果其他地方也有配置文件就用这个导入
+         assembly不支持resources文件自动导入所以就手写一下把-->
         <resources>
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*.properties</include>
                 </includes>
             </resource>
         </resources>
@@ -58,6 +65,8 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
+                    <!--代表组装描述引用打包的时候是否引用其他的配置文件如果
+                    就这么单独一个就写这个jar一个就行-->
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
