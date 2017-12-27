@@ -15,17 +15,6 @@ public class DBimp implements DbService.Iface {
     //日志对象
     public static Logger log = Logger.getLogger(DBimp.class);
 
-//    public static void getConnection() {
-//        ComboPooledDataSource dataSource = new ComboPooledDataSource("mysql");
-//        try {
-//            conn = dataSource.getConnection();
-//            log.info("获取连接成功");
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            log.error(e);
-//        }
-//
-//    }
 
     @Override
     public boolean executeNoneQuery(String sql) {
@@ -33,7 +22,6 @@ public class DBimp implements DbService.Iface {
         int i = 0;
         synchronized (this) {
             QueryRunner qr = new QueryRunner();
-            // DBimp.getConnection();
             try {
                 Connection conn = jdbcUtil.getConnection();
 
@@ -41,6 +29,7 @@ public class DBimp implements DbService.Iface {
                 log.info("执行的sql语句为" + "[" + sql + "]");
                 log.info("成功更新了" + i + "语句");
                 jdbcUtil.releaseConnection(conn);
+                return true;
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 log.error("执行的sql语句为" + "[" + sql + "]");
@@ -56,14 +45,11 @@ public class DBimp implements DbService.Iface {
         ArrayList<String> list = new ArrayList<>();
         QueryRunner qr = new QueryRunner();
         ArrayListHandler handler = new ArrayListHandler();
-        // DBimp.getConnection();
         try {
             synchronized (this) {
                 Connection conn = jdbcUtil.getConnection();
-                if (conn == null) {
-                    log.info("执行的sql语句为" + "[" + sql + "]");
-                    log.info("查询成功");
-                }
+                log.info("执行的sql语句为" + "[" + sql + "]");
+                log.info("查询成功");
                 List<Object[]> query = qr.query(conn, sql, handler);
                 for (Object[] objects : query) {
                     for (Object object : objects) {
@@ -77,9 +63,8 @@ public class DBimp implements DbService.Iface {
             // TODO Auto-generated catch block
             log.error(e);
         }
-        // 关闭连接
 
-        return list;
+        return null;
 
     }
 
