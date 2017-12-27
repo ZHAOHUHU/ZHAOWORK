@@ -6,6 +6,7 @@ public class Test {
     public static Logger log = Logger.getLogger(Test.class);
 
     public static void main(String[] args) {
-       log.warn("好饿啊");
+
+        log.warn("好饿啊");
     }
 }
