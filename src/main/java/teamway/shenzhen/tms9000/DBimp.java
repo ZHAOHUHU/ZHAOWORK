@@ -15,18 +15,6 @@ public class DBimp implements DbService.Iface {
     //日志对象
     public static Logger log = Logger.getLogger(DBimp.class);
 
-//    public static void getConnection() {
-//        ComboPooledDataSource dataSource = new ComboPooledDataSource("mysql");
-//        try {
-//            conn = dataSource.getConnection();
-//            log.info("获取连接成功");
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            log.error(e);
-//        }
-//
-//    }
-
     @Override
     public boolean executeNoneQuery(String sql) {
         // 更新删除添加功能
