@@ -36,17 +36,14 @@ public class DBimp implements DbService.Iface {
             // DBimp.getConnection();
             try {
                 Connection conn = jdbcUtil.getConnection();
-                if (conn == null) {
-                }
+
                 i = qr.update(conn, sql);
                 log.info("执行的sql语句为" + "[" + sql + "]");
                 log.info("成功更新了" + i + "语句");
-                if (conn == null) {
-                    jdbcUtil.releaseConnection(conn);
-                }
+                jdbcUtil.releaseConnection(conn);
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
-                log.info("执行的sql语句为" + "[" + sql + "]");
+                log.error("执行的sql语句为" + "[" + sql + "]");
                 log.error(e);
             }
         }
