@@ -16,6 +16,11 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
 public class MyTNonblockingServerSocket extends TNonblockingServerSocket {
+    public static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MyTNonblockingServerSocket.class);
+    private ServerSocketChannel serverSocketChannel;
+    private ServerSocket serverSocket_;
+    private int clientTimeout_;
+
     public MyTNonblockingServerSocket(int port)
             throws TTransportException {
         this(port, 0);
@@ -49,6 +54,7 @@ public class MyTNonblockingServerSocket extends TNonblockingServerSocket {
             throw new TTransportException((new StringBuilder()).append("Could not create ServerSocket on address ").append(bindAddr.toString()).append(".").toString());
         }
     }
+
     @Override
     public void listen()
             throws TTransportException {
@@ -73,7 +79,7 @@ public class MyTNonblockingServerSocket extends TNonblockingServerSocket {
                 return null;
             SocketAddress socketAddress = socketChannel.getRemoteAddress();
             String remote_ip = socketAddress.toString();
-            System.out.println("客户端的IP为:" + remote_ip);
+            log.info("客户端的IP为:" + remote_ip);
             tsocket = new TNonblockingSocket(socketChannel);
             tsocket.setTimeout(clientTimeout_);
         } catch (IOException iox) {
@@ -104,9 +110,4 @@ public class MyTNonblockingServerSocket extends TNonblockingServerSocket {
     public void interrupt() {
         close();
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger("LCQTNonblockingServerSocket");
-    private ServerSocketChannel serverSocketChannel;
-    private ServerSocket serverSocket_;
-    private int clientTimeout_;
 }
