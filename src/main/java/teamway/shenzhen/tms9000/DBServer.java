@@ -14,13 +14,13 @@ import org.apache.thrift.transport.TTransportException;
 
 public class DBServer {
 
-	private static final int port = 10745;
+	private static final int port = 10725;
 	public static Logger log = Logger.getLogger(DBServer.class);
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		log.debug("action.........");
 		  try {
-	            TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(port);
+	            TNonblockingServerSocket serverTransport = new MyTNonblockingServerSocket(port);
 	            // 设置协议工厂为 TBinaryProtocol.Factory
 	            // 关联处理器与 Hello 服务的实现
 	            TProcessor tprocessor = new DbService.Processor(new DBimp());
