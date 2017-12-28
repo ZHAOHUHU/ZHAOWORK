@@ -1,6 +1,7 @@
 teamway\shenzhen\tms9000\DBServer.class
 teamway\shenzhen\tms9000\DbService$AsyncClient$queryObject_call.class
 teamway\shenzhen\tms9000\DbService$executeNoneQuery_result$executeNoneQuery_resultStandardScheme.class
+teamway\shenzhen\tms9000\MyTNonblockingServerSocket.class
 teamway\shenzhen\tms9000\jdbcUtil.class
 teamway\shenzhen\tms9000\DbService$executeNoneQuery_result$executeNoneQuery_resultStandardSchemeFactory.class
 teamway\shenzhen\tms9000\DbService$queryObject_args$_Fields.class
@@ -37,7 +38,6 @@ teamway\shenzhen\tms9000\DbService$queryObject_result$queryObject_resultStandard
 teamway\shenzhen\tms9000\DbService$Client.class
 teamway\shenzhen\tms9000\DbService$Processor.class
 teamway\shenzhen\tms9000\DbService$executeNoneQuery_args.class
-teamway\shenzhen\tms9000\Test.class
 teamway\shenzhen\tms9000\DbService$executeNoneQuery_result$executeNoneQuery_resultTupleScheme.class
 teamway\shenzhen\tms9000\DbService$Processor$queryObject.class
 teamway\shenzhen\tms9000\DbService$queryObject_args.class

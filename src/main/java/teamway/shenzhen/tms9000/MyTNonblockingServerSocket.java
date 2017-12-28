@@ -1,11 +1,9 @@
 package teamway.shenzhen.tms9000;
 
+import org.apache.log4j.Logger;
 import org.apache.thrift.transport.TNonblockingServerSocket;
 import org.apache.thrift.transport.TNonblockingSocket;
 import org.apache.thrift.transport.TTransportException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -16,7 +14,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
 public class MyTNonblockingServerSocket extends TNonblockingServerSocket {
-    public static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MyTNonblockingServerSocket.class);
+    public static Logger log = Logger.getLogger(MyTNonblockingServerSocket.class);
     private ServerSocketChannel serverSocketChannel;
     private ServerSocket serverSocket_;
     private int clientTimeout_;

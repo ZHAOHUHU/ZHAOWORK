@@ -14,7 +14,7 @@ import org.apache.thrift.transport.TTransportException;
 
 public class DBServer {
 
-	private static final int port = 10725;
+	private static final int port = 10745;
 	public static Logger log = Logger.getLogger(DBServer.class);
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
