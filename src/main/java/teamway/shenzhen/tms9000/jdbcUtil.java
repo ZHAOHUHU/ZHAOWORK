@@ -15,11 +15,12 @@ public class jdbcUtil {
     public static Connection getConnection() {
         try {
             Connection connection = dataSource.getConnection();
-            log.debug("获取连接成功");
+            log.info("获取数据库连接成功");
             return connection;
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             log.error(e);
+            log.error("数据库连接异常");
         }
         return null;
 
@@ -32,6 +33,7 @@ public class jdbcUtil {
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 log.error(e);
+                log.error("数据库关闭异常");
             }
         }
     }

@@ -16,9 +16,7 @@ public class DBServer {
 
 	private static final int port = 10745;
 	public static Logger log = Logger.getLogger(DBServer.class);
-	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		log.debug("action.........");
 		  try {
 	            TNonblockingServerSocket serverTransport = new MyTNonblockingServerSocket(port);
 	            // 设置协议工厂为 TBinaryProtocol.Factory
@@ -33,10 +31,11 @@ public class DBServer {
 	            //线程池服务模型，使用标准的阻塞式IO，预先创建一组线程处理请求。
 	            TServer server =new TNonblockingServer(tArgs);
 
-	            log.debug("Start server on "+port);
+	            log.info("MySQLService服务启动成功，端口号为： "+port);
 	            server.serve();
 	        } catch (TTransportException e) {
 	           log.error(e);
+	           log.error("服务启动失败");
 	        }
 	    }
 	}

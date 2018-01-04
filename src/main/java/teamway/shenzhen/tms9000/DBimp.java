@@ -24,15 +24,15 @@ public class DBimp implements DbService.Iface {
             QueryRunner qr = new QueryRunner();
             try {
                 Connection conn = jdbcUtil.getConnection();
-
                 i = qr.update(conn, sql);
-                log.debug("执行的sql语句为" + "[" + sql + "]");
-                log.debug("成功更新了" + i + "语句");
+                log.info("执行的sql语句为" + "[" + sql + "]");
+                log.info("成功更新了" + i + "条语句");
                 jdbcUtil.releaseConnection(conn);
                 return true;
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 log.error("执行的sql语句为" + "[" + sql + "]");
+                log.error("执行的sql语句异常");
                 log.error(e);
             }
         }
@@ -48,8 +48,7 @@ public class DBimp implements DbService.Iface {
         try {
             synchronized (this) {
                 Connection conn = jdbcUtil.getConnection();
-                log.debug("执行的sql语句为" + "[" + sql + "]");
-                log.debug("查询成功");
+                log.info("查询成功，执行的sql语句为" + "[" + sql + "]");
                 List<Object[]> query = qr.query(conn, sql, handler);
                 for (Object[] objects : query) {
                     for (Object object : objects) {
@@ -62,6 +61,8 @@ public class DBimp implements DbService.Iface {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             log.error(e);
+            log.error("执行的sql语句为" + "[" + sql + "]");
+            log.error("sql语句执行异常");
         }
 
         return null;
